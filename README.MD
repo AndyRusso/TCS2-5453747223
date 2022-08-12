@@ -1,4 +1,4 @@
-# My expirience
+# My experience
 
 From this contest, I learned bitwise operations, which surely will be helpful in the future. Got a general idea of how smart contracts work, how to make and deploy them. It was interesting to learn, and it was surely fun to come up with solutions to the tasks. I solved 2 tasks, the first task [1.fc](1.fc) and the second task [2.fc](2.fc). Overall, I'm happy that I participated in this contest.
 
