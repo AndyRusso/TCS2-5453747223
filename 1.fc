@@ -10,4 +10,52 @@
 
 ;; testable
 (int) gcd(int a, int b) method_id {
+    ;; Amount of times both a and b can be divided by 2
+    int k = 0;
+
+    ;; gcd(0, x) = x, so if either are 0 we can return the gcd right away
+    if (a == 0) {
+        return b;
+    };
+
+    if (b == 0) {
+        return a;
+    };
+
+    ;; Divide a and b by 2 as much as possible until both of them are odd
+    int times_a = 0;
+    int times_b = 0;
+
+    while ((a % 2 == 0) & a != 0) {
+        ;; Bitshifting is used as a faster way to divide by 2
+        a >>= 1;
+        times_a += 1;
+    };
+
+    while ((b % 2 == 0) & b != 0) {
+        ;; Bitshifting is used as a faster way to divide by 2
+        b >>= 1;
+        times_b += 1;
+    };
+
+    ;; Set k's value
+    k = min(times_a, times_b);
+
+    ;; gcd(|x - y|, min(x, y)) if both x and y are odd, so we repeat the substraction until b == 0.
+    ;; Also turn b odd after each substraction
+    while (b != 0) {
+        (a, b) = minmax(a, b);
+
+        b -= a;
+
+        while ((b % 2 == 0) & b != 0) {
+            ;; Bitshifting is used as a faster way to divide by 2
+            b >>= 1;
+        }
+    };
+
+    ;; Finally, multiply the left over number by 2, k times
+    ;; Here, bit shifting is used for multiplications by powers of 2
+    return a << k;
 }
+

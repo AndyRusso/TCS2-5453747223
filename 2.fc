@@ -15,4 +15,60 @@
 
 ;; testable
 (cell, cell) merge_hashmaps(cell dict1, cell dict2) method_id {
+    ;; Define the merged_dict variable as a copy of the second dict
+    cell merged_dict = dict2;
+
+    ;; Define the discarded_dict variable as an empty dict
+    cell discarded_dict = new_dict();
+
+    ;; Flags are used to break loops
+    int flag_1 = 0;
+    int flag_2 = 0;
+
+    ;; Keys are used to access dicts' elements
+    int key_1 = -1;
+    int key_2 = -1;
+
+    ;; Define slices of dicts, and give them an initial value
+    slice slice_1 = begin_cell().end_cell().begin_parse();
+    slice slice_2 = begin_cell().end_cell().begin_parse();
+
+    ;; Run udict_get_next? fot the first time to get actual values for keys, slices and flags
+    (key_1, slice_1, flag_1) = dict1.udict_get_next?(256, key_1);
+    (key_2, slice_2, flag_2) = dict2.udict_get_next?(256, key_2);
+
+    ;; Loop until there is no more keys in dict1
+    while (flag_1 != 0) {
+
+        ;; Loop until there is no more keys in dict2
+        while (flag_2 != 0) {
+
+            ;; Did keys intersect?
+            if (key_1 == key_2) {
+                ;; If so,
+
+                ;; Set merged_dict's key/value pair with value from the dict1
+                merged_dict~udict_set(256, key_1, slice_1);
+                ;; Save discarded values into a separate dict
+                discarded_dict~udict_set(256, key_1, slice_2);
+            } else {
+                ;; If not,
+                ;; Add to the marged_dict a key/value pair from the dict1
+                merged_dict~udict_set(256, key_1, slice_1);
+            }
+
+            ;; Get a new key/value pair from dict2
+            (key_2, slice_2, flag_2) = dict2.udict_get_next?(256, key_2);
+        }
+
+        ;; Reset variables to allow execution of the next cycle
+        key_2 = -1;
+        flag_2 = -1;
+
+        ;; Get a new key/value pair from dict1
+        (key_1, slice_1, flag_1) = dict1.udict_get_next?(256, key_1);
+    }
+
+    ;; Return the resulted dicts
+    return (merged_dict, discarded_dict);
 }
